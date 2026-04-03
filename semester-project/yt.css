@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    font-family: Roboto, Arial;
+    background-color: #f9f9f9;
+}
+
+.header {
+    height: 56px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 0 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+}
+
+.youtube-logo {
+    height: 20px;
+    margin-left: 15px;
+}
+
+.hamburger-menu {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.middle-section {
+    flex: 1;
+    margin-left: 40px;
+    margin-right: 35px;
+    max-width: 500px;
+    display: flex;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 2px 0 0 2px;
+}
+
+.right-section a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+
+@media (max-width: 768px) {
+    .right-section {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 56px;
+        right: 0;
+        background-color: white;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
+
+    /* Class to show menu when JS toggles it */
+    .right-section.active {
+        display: flex;
+    }
+
+    .right-section a {
+        padding: 15px;
+        margin: 0;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .middle-section {
+        display: none; 
+    }
+}
+
+
+.video-grid {
+    margin-top: 80px;
+    padding: 20px;
+}
