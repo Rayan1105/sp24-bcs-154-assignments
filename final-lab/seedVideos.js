@@ -27,7 +27,8 @@ const seedDB = async () => {
         category: categories[i % 5],
         rating: (Math.random() * 2 + 3).toFixed(1),
         stock: Math.floor(Math.random() * 100),
-        thumbnail: `/thumbnails/thumbnail-${(i % 6) + 1}.webp`
+        thumbnail: `/thumbnails/thumbnail-${(i % 6) + 1}.webp`,
+        channelPicture: `/channel-pictures/channel-${((i - 1) % 6) + 1}.jpeg`
       });
     }
 
@@ -39,5 +40,7 @@ const seedDB = async () => {
     mongoose.connection.close();
   }
 };
+
+seedDB();
 
 seedDB();
