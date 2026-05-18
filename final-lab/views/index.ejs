@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube.com Clone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/general.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/video.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+  </head>
+  <body>
+    <header class="header">
+      <div class="left-section">
+        <button id="hamburger" class="hamburger-button">
+          <img class="hamburger-menu-icon" src="/icons/hamburger-menu.svg">
+        </button>
+        <img class="youtube-logo" src="/icons/youtube-logo.svg">
+      </div>
+      <div class="middle-section">
+        <input class="search-bar" type="text" placeholder="Search">
+        <button class="search-button">
+          <img class="search-icon" src="/icons/search.svg">
+          <div class="tooltip">Search</div>
+        </button>
+        <button class="voice-search-button">
+          <img class="voice-search-icon" src="/icons/voice-search-icon.svg">
+          <div class="tooltip">Search with your voice</div>
+        </button>
+      </div>
+      <div class="right-section">
+        <div class="upload-icon-container">
+          <img class="upload-icon" src="/icons/upload.svg">
+          <div class="tooltip">Create</div>
+        </div>
+        <img class="youtube-apps-icon" src="/icons/youtube-apps.svg">
+        <div class="notifications-icon-container">
+          <img class="notifications-icon" src="/icons/notifications.svg">
+          <div class="notifications-count">3</div>
+        </div>
+        <img class="current-user-picture" src="/channel-pictures/my-channel.jpg">
+      </div>
+    </header>
+
+    <nav id="nav-menu" class="sidebar">
+      <div class="sidebar-link">
+        <img src="/icons/home.svg">
+        <div>Home</div>
+      </div>
+      <div class="sidebar-link">
+        <img src="/icons/explore.svg">
+        <div>Explore</div>
+      </div>
+      <div class="sidebar-link">
+        <img src="/icons/subscriptions.svg">
+        <div>Subscriptions</div>
+      </div>
+      <div class="sidebar-link">
+        <img src="/icons/originals.svg">
+        <div>Originals</div>
+      </div>
+      <div class="sidebar-link">
+        <img src="/icons/youtube-music.svg">
+        <div>YouTube Music</div>
+      </div>
+      <div class="sidebar-link">
+        <img src="/icons/library.svg">
+        <div>Library</div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Videos from MongoDB -->
+      <section class="video-grid">
+        <% videos.forEach(video => { %>
+          <div class="video-preview">
+            <div class="thumbnail-row">
+              <img class="thumbnail" src="<%= video.thumbnail %>" alt="<%= video.title %>">
+            </div>
+            <div class="video-info-grid">
+              <div class="channel-picture">
+                <img class="profile-picture" src="/channel-pictures/my-channel.jpg">
+              </div>
+              <div class="video-info">
+                <p class="video-title"><%= video.title %></p>
+                <p class="video-author"><%= video.category %></p>
+                <p class="video-stats">Rating: <%= video.rating %> &#183; $<%= video.price.toFixed(2) %></p>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </section>
+
+      <div style="text-align:center; margin: 30px 0;">
+        <a href="/videos" style="padding: 10px 24px; background: #065fd4; color: white; border-radius: 2px; text-decoration: none; font-weight: 500;">Browse All Videos →</a>
+      </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/yt.js"></script>
+  </body>
+</html>

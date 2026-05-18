@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Video Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/general.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/video.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <style>
+      .catalog-container {
+        display: flex;
+        margin-top: 80px;
+      }
+      .filter-sidebar {
+        width: 250px;
+        padding: 20px;
+        position: fixed;
+        left: 0;
+        top: 60px;
+        bottom: 0;
+        background-color: white;
+        border-right: 1px solid #e5e5e5;
+        overflow-y: auto;
+      }
+      .filter-sidebar h3 { margin-top: 0; }
+      .filter-group { margin-bottom: 20px; }
+      .filter-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+      .filter-group input, .filter-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .filter-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #065fd4;
+        color: white;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .filter-btn:hover { background-color: #0056b3; }
+      .main-content {
+        margin-left: 270px;
+        padding: 20px;
+        flex: 1;
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        gap: 10px;
+      }
+      .page-btn {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        background: white;
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+      }
+      .page-btn.active {
+        background-color: #065fd4;
+        color: white;
+        border-color: #065fd4;
+      }
+      .price-info { font-weight: 500; color: #0a0; margin: 5px 0; }
+      .stock-info { font-size: 13px; color: #606060; }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="left-section">
+        <button id="hamburger" class="hamburger-button">
+          <img class="hamburger-menu-icon" src="/icons/hamburger-menu.svg">
+        </button>
+        <img class="youtube-logo" src="/icons/youtube-logo.svg">
+      </div>
+      <div class="middle-section"></div>
+      <div class="right-section"></div>
+    </header>
+
+    <div class="catalog-container">
+      <!-- Sidebar Filters -->
+      <aside class="filter-sidebar">
+        <h3>Filters</h3>
+        <form action="/videos" method="GET">
+          <div class="filter-group">
+            <label>Search Title</label>
+            <input type="text" name="search" value="<%= search %>" placeholder="Search...">
+          </div>
+          <div class="filter-group">
+            <label>Category</label>
+            <select name="category">
+              <option value="All" <%= category === 'All' ? 'selected' : '' %>>All</option>
+              <option value="Gaming" <%= category === 'Gaming' ? 'selected' : '' %>>Gaming</option>
+              <option value="Education" <%= category === 'Education' ? 'selected' : '' %>>Education</option>
+              <option value="Entertainment" <%= category === 'Entertainment' ? 'selected' : '' %>>Entertainment</option>
+              <option value="Tech" <%= category === 'Tech' ? 'selected' : '' %>>Tech</option>
+              <option value="Music" <%= category === 'Music' ? 'selected' : '' %>>Music</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Min Price ($)</label>
+            <input type="number" name="minPrice" value="<%= minPrice %>" min="0">
+          </div>
+          <div class="filter-group">
+            <label>Max Price ($)</label>
+            <input type="number" name="maxPrice" value="<%= maxPrice %>" min="0">
+          </div>
+          <button type="submit" class="filter-btn">Apply Filters</button>
+        </form>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <h2>Video Catalog</h2>
+        <% if (videos.length === 0) { %>
+          <p>No videos found matching your criteria.</p>
+        <% } else { %>
+          <section class="video-grid">
+            <% videos.forEach(video => { %>
+              <div class="video-preview">
+                <div class="thumbnail-row">
+                  <img class="thumbnail" src="<%= video.thumbnail %>" alt="<%= video.title %>">
+                </div>
+                <div class="video-info-grid">
+                  <div class="channel-picture">
+                    <img class="profile-picture" src="/channel-pictures/my-channel.jpg">
+                  </div>
+                  <div class="video-info">
+                    <p class="video-title"><%= video.title %></p>
+                    <p class="video-author">Category: <%= video.category %></p>
+                    <p class="video-stats">Rating: <%= video.rating %> &#183; Stock: <%= video.stock %></p>
+                    <p class="price-info">$<%= video.price.toFixed(2) %></p>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </section>
+        <% } %>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+          <div class="pagination">
+            <% 
+              const queryParams = [];
+              if (search) queryParams.push(`search=${encodeURIComponent(search)}`);
+              if (category && category !== 'All') queryParams.push(`category=${encodeURIComponent(category)}`);
+              if (minPrice) queryParams.push(`minPrice=${encodeURIComponent(minPrice)}`);
+              if (maxPrice) queryParams.push(`maxPrice=${encodeURIComponent(maxPrice)}`);
+              const qs = queryParams.length ? '&' + queryParams.join('&') : '';
+            %>
+            
+            <% if (currentPage > 1) { %>
+              <a href="?page=<%= currentPage - 1 %><%= qs %>" class="page-btn">Previous</a>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a href="?page=<%= i %><%= qs %>" class="page-btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %><%= qs %>" class="page-btn">Next</a>
+            <% } %>
+          </div>
+        <% } %>
+      </main>
+    </div>
+  </body>
+</html>
