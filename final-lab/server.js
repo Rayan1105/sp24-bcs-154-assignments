@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 });
 
 // Mount routers
-app.use('/auth', require('./routes/auth'));
+app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/videos'));
 app.use('/admin', require('./routes/admin'));
 app.use('/api/v1', require('./routes/api'));
