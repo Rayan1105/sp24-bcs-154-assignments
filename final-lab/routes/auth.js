@@ -27,6 +27,11 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// GET /login
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
 // POST /login
 router.post('/login', async (req, res) => {
   try {
@@ -55,7 +60,7 @@ router.post('/login', async (req, res) => {
     };
     
     req.flash('success', 'Successfully logged in!');
-    res.redirect(user.role === 'admin' ? '/admin' : '/');
+    res.redirect('/sales');
   } catch (err) {
     console.error(err);
     req.flash('error', 'Something went wrong during login.');
