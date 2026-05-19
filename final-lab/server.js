@@ -53,6 +53,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/', require('./routes/videos'));
 app.use('/admin', require('./routes/admin'));
 app.use('/api/v1', require('./routes/api'));
+app.use('/sales', require('./routes/sales'));
 
 // Start server
 app.listen(PORT, () => {
