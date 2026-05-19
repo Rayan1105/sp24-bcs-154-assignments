@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const Video = require('./models/Video');
 
 const Order = require('./models/Order');
+const User = require('./models/User');
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected for seeding'))
@@ -18,7 +19,18 @@ const seedDB = async () => {
   try {
     await Video.deleteMany({});
     await Order.deleteMany({});
-    console.log('Cleared existing videos and orders.');
+    await User.deleteMany({});
+    console.log('Cleared existing videos, orders, and users.');
+
+    // Seed Admin
+    const adminUser = new User({
+      name: 'Admin User',
+      email: 'admin@test.com',
+      password: 'password123',
+      role: 'admin'
+    });
+    await adminUser.save();
+    console.log('Successfully seeded admin account.');
 
     const categories = ['Gaming', 'Education', 'Entertainment', 'Tech', 'Music'];
     const dummyVideos = [];
