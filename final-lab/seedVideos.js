@@ -8,6 +8,8 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 const mongoose = require('mongoose');
 const Video = require('./models/Video');
 
+const Order = require('./models/Order');
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected for seeding'))
   .catch(err => console.error(err));
@@ -15,7 +17,8 @@ mongoose.connect(process.env.MONGO_URI)
 const seedDB = async () => {
   try {
     await Video.deleteMany({});
-    console.log('Cleared existing videos.');
+    await Order.deleteMany({});
+    console.log('Cleared existing videos and orders.');
 
     const categories = ['Gaming', 'Education', 'Entertainment', 'Tech', 'Music'];
     const dummyVideos = [];
@@ -32,15 +35,30 @@ const seedDB = async () => {
       });
     }
 
-    await Video.insertMany(dummyVideos);
+    const insertedVideos = await Video.insertMany(dummyVideos);
     console.log('Successfully seeded 25 videos.');
+
+    // Seed dummy orders
+    const dummyOrders = [];
+    for (let i = 0; i < 10; i++) {
+      const randomVideo = insertedVideos[Math.floor(Math.random() * insertedVideos.length)];
+      const quantity = Math.floor(Math.random() * 3) + 1;
+      
+      dummyOrders.push({
+        items: [{ video: randomVideo._id, quantity }],
+        totalAmount: randomVideo.price * quantity,
+        createdAt: new Date(Date.now() - Math.random() * 1000000000) // Random date in the past
+      });
+    }
+    
+    await Order.insertMany(dummyOrders);
+    console.log('Successfully seeded 10 orders.');
+
   } catch (error) {
     console.error('Error seeding DB:', error);
   } finally {
     mongoose.connection.close();
   }
 };
-
-seedDB();
 
 seedDB();
